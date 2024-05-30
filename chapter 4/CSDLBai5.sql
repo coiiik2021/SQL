@@ -1,0 +1,72 @@
+CREATE DATABASE BAI5
+
+GO
+USE BAI5
+GO
+
+CREATE TABLE dbo.MHoc(
+	MaMH char(10) PRIMARY KEY,
+	TenMH nvarchar(20) NOT NULL, 
+	SoTiet int
+)
+GO
+
+INSERT INTO MHoc VALUES('AV', N'Anh Văn', 20)
+INSERT INTO MHoc VALUES('VH', N'Văn Học', 45)
+INSERT INTO MHoc VALUES('LS', N'Lịch Sử', 20)
+INSERT INTO MHoc VALUES('TH', N'Toán ', 30)
+GO
+
+CREATE TABLE dbo.GV(
+	MaGV char(10) PRIMARY KEY,
+	TenGV nvarchar(20),
+	MaMH char(10) references MHoc(MaMH) NULL
+)
+
+GO
+
+INSERT INTO GV VALUES ('GV001', N'Nguyễn Anh Dũng', 'TH')
+INSERT INTO GV VALUES ('GV002', N'Phạm Quốc Duy', NULL)
+INSERT INTO GV VALUES ('GV003', N'Bùi Thị Hạnh', 'VH')
+INSERT INTO GV VALUES ('GV004', N'Lã Giang Hương', 'LS')
+INSERT INTO GV VALUES ('GV005', N'Đặng Vĩnh Trí', 'AV')
+INSERT INTO GV VALUES ('GV006', N'Bùi Đức Long', NULL)
+Go
+
+CREATE TABLE dbo.BuoiThi(
+	HKy char(5) NOT NULL,
+	Ngay date,
+	Gio int,
+	PHG int,
+	MaMH char(10) references MHoc(MaMH),
+	TGThi TIME,
+	PRIMARY KEY(HKy, Ngay, Gio, PHG, MaMH)
+)
+GO
+
+INSERT INTO BuoiThi VALUES('HK1', '2021-11-12', 90, 101, 'AV', '12:00:00')
+INSERT INTO BuoiThi VALUES('HK2', '2022-4-20', 90, 201, 'AV', '8:00:00')
+INSERT INTO BuoiThi VALUES('HK1', '2021-1-2', 150, 102, 'VH', '9:00:00')
+INSERT INTO BuoiThi VALUES('HK1', '2021-10-8', 90, 103, 'LS', '15:30:00')
+INSERT INTO BuoiThi VALUES('HK2', '2022-6-2', 120, 203, 'TH', '11:15:00')
+INSERT INTO BuoiThi VALUES('HK2', '2022-5-15',120, 104, 'TH', '13:30:00')
+GO
+
+CREATE TABLE PC_Coi_Thi(
+	MaGV char(10) references GV(MaGV),
+	HKy char(5) NOT NULL,
+	Ngay date,
+	Gio int,
+	PHG int,
+	PRIMARY KEY(MaGV, HKy,Ngay, Gio,PHG)
+)
+GO
+
+INSERT INTO PC_Coi_Thi VALUES('GV001','HK1', '2021-11-12', 90, 101)
+INSERT INTO PC_Coi_Thi VALUES('GV002', 'HK2', '2022-4-20', 90, 201)
+INSERT INTO PC_Coi_Thi VALUES('GV003', 'HK1', '2021-1-2', 150, 102)
+INSERT INTO PC_Coi_Thi VALUES('GV004', 'HK1', '2021-10-8', 90, 103)
+INSERT INTO PC_Coi_Thi VALUES('GV005', 'HK2', '2022-6-2', 120, 203)
+INSERT INTO PC_Coi_Thi VALUES('GV006', 'HK2', '2022-5-15', 120, 104)
+GO
+
